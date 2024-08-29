@@ -4,7 +4,12 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from datetime import datetime
 import time
+import logging
+
+logging.basicConfig(filename='/var/log/bt-hub-dmz.log', level=logging.INFO)
+#logging.disable() ## <--- Uncomment to disable logging.
 
 # <--------- VARABLES TO BE CHANGED ---------------> #
 
@@ -45,6 +50,7 @@ element = driver.find_element(By.ID ,"dmz_ip")
 DMZ_SERVER = element.get_attribute("value")
 
 if DMZ_SERVER != DMZ_IP:
+    logging.info(str(datetime.now()) + ' DMZ server was ' + str(DMZ_SERVER) + ' and is now: ' + str(DMZ_IP))
     driver.find_element(By.ID ,"show_IP_address_dmz").click() # Click on the Show IP address button under the DMZ section.
     driver.find_element(By.ID ,"dmz_ip").click() # Click the Device IP address field.
     driver.find_element(By.ID ,"IP1").click()  # Click the 1st octet field.
@@ -65,4 +71,5 @@ if DMZ_SERVER != DMZ_IP:
     driver.find_element(By.XPATH ,'//*[@onclick="SaveButtonConfiguration()"]').click() # Click the Save button.
     time.sleep(5)
     driver.quit()
-
+else: 
+    logging.info(str(datetime.now()) + ': DMZ server is: ' + str(DMZ_IP))
